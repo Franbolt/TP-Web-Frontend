@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Receta } from '../models/receta.interface';
+import { Receta, RecetaData } from '../models/receta.interface';
 
 @Service()
 export class RecetasService {
@@ -23,11 +23,11 @@ export class RecetasService {
     return this.http.get<Receta>(`${this.apiUrl}/${id}`);
   }
 
-  create(receta: Omit<Receta, 'id'>): Observable<Receta> {
+  create(receta: RecetaData): Observable<Receta> {
     return this.http.post<Receta>(this.apiUrl, receta);
   }
 
-  update(id: number, receta: Partial<Receta>): Observable<Receta> {
+  update(id: number, receta: Partial<RecetaData>): Observable<Receta> {
     return this.http.put<Receta>(`${this.apiUrl}/${id}`, receta);
   }
 

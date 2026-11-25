@@ -9,3 +9,12 @@ export interface Receta {
   porciones: number;
   categoria: Categoria;
 }
+
+export interface RecetaData {
+  idCategoria: number;
+  nombre: string;
+  tiempo: number;
+  ingredientes: string;
+  preparacion: string;
+  porciones: number;
+}

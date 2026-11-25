@@ -1,0 +1,40 @@
+<h2>Recetas</h2>
+
+<label for="filtro">Filtrar por categoría:</label>
+<select id="filtro" (change)="alCambiarCategoria($event)">
+  <option value="">Todas</option>
+  @for (categoria of categorias(); track categoria.id) {
+    <option [value]="categoria.id">{{ categoria.nombre }}</option>
+  }
+</select>
+
+@if (error()) {
+  <p class="error">{{ error() }}</p>
+}
+
+@if (cargando()) {
+  <p>Cargando...</p>
+}
+
+@if (!cargando() && !error()) {
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th><th>Nombre</th><th>Tiempo (min)</th><th>Porciones</th><th>Categoría</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (receta of recetas(); track receta.id) {
+        <tr>
+          <td>{{ receta.id }}</td>
+          <td>{{ receta.nombre }}</td>
+          <td>{{ receta.tiempo }}</td>
+          <td>{{ receta.porciones }}</td>
+          <td>{{ receta.categoria.nombre }}</td>
+        </tr>
+      } @empty {
+        <tr><td colspan="5">No hay recetas para este filtro.</td></tr>
+      }
+    </tbody>
+  </table>
+}
