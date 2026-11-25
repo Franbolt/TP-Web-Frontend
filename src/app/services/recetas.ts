@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { Receta, RecetaData } from '../models/receta.interface';
 
 @Service()
 export class RecetasService {
-  private readonly apiUrl = 'http://localhost:3000/recetas';
+  private readonly apiUrl = environment.apiUrl + '/recetas';
 
   private http = inject(HttpClient);
 
