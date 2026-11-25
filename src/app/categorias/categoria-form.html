@@ -1,0 +1,20 @@
+<h2>{{ esEdicion ? 'Editar categoría' : 'Nueva categoría' }}</h2>
+
+@if (error()) {
+  <p class="error">{{ error() }}</p>
+}
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+  <label for="nombre">Nombre</label>
+  <input id="nombre" type="text" formControlName="nombre" />
+  @if (form.get('nombre')?.invalid && form.get('nombre')?.touched) {
+    <p class="error">El nombre es obligatorio (máximo 50 caracteres).</p>
+  }
+
+  <div class="acciones">
+    <button type="submit" [disabled]="enviando()">
+      {{ esEdicion ? 'Guardar cambios' : 'Crear categoría' }}
+    </button>
+    <a routerLink="/categorias">Cancelar</a>
+  </div>
+</form>

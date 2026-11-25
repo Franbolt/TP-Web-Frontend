@@ -1,5 +1,8 @@
 <h2>Categorías</h2>
 
+<a routerLink="/categorias/nueva" class="boton">Nueva categoría</a>
+
+
 @if (error()) {
   <p class="error">{{ error() }}</p>
 }
@@ -8,19 +11,23 @@
   <p>Cargando...</p>
 }
 
-@if (!cargando() && !error()) {
+@if (!cargando()) {
   <table>
     <thead>
-      <tr><th>ID</th><th>Nombre</th></tr>
+      <tr><th>ID</th><th>Nombre</th><th>Acciones</th></tr>
     </thead>
     <tbody>
       @for (categoria of categorias(); track categoria.id) {
         <tr>
           <td>{{ categoria.id }}</td>
           <td>{{ categoria.nombre }}</td>
+          <td>
+            <a [routerLink]="['/categorias', categoria.id, 'editar']">Editar</a>
+            <button type="button" (click)="borrar(categoria.id)">Borrar</button>
+          </td>
         </tr>
       } @empty {
-        <tr><td colspan="2">No hay categorías todavía.</td></tr>
+        <tr><td colspan="3">No hay categorías todavía.</td></tr>
       }
     </tbody>
   </table>

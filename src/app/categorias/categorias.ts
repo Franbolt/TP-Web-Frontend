@@ -1,9 +1,10 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Categoria } from '../models/categoria.interface';
 import { CategoriasService } from '../services/categorias';
 
 @Component({
-  imports: [],
+  imports: [RouterLink],
   selector: 'app-categorias',
   styleUrl: './categorias.scss',
   templateUrl: './categorias.html',
@@ -17,6 +18,14 @@ export class Categorias implements OnInit {
 
   ngOnInit(): void {
     this.cargar();
+  }
+
+  borrar(id: number): void {
+    if (!confirm('¿Borrar la categoría ' + id + '?')) return;
+    this.categoriasService.remove(id).subscribe({
+      next: () => this.cargar(),
+      error: (err) => this.error.set(err?.error?.message ?? 'No se pudo borrar la categoría.'),
+    });
   }
 
   cargar(): void {
