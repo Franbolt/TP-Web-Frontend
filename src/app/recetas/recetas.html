@@ -20,44 +20,46 @@
 }
 
 @if (!cargando()) {
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th><th>Nombre</th><th>Tiempo (min)</th><th>Porciones</th><th>Categoría</th><th>Ingredientes</th><th>Preparación</th><th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (receta of recetas(); track receta.id) {
+  <div class="tabla-scroll">
+    <table>
+      <thead>
         <tr>
-          <td>{{ receta.id }}</td>
-          <td>{{ receta.nombre }}</td>
-          <td>{{ receta.tiempo }}</td>
-          <td>{{ receta.porciones }}</td>
-          <td>{{ receta.categoria.nombre }}</td>
-          <td class="texto-largo">
-            <span>{{ ingredientesAbiertos().has(receta.id) ? receta.ingredientes : resumen(receta.ingredientes) }}</span>
-            @if (esLargo(receta.ingredientes)) {
-              <button type="button" class="ver-mas" (click)="toggleIngredientes(receta.id)">
-                {{ ingredientesAbiertos().has(receta.id) ? 'Ocultar' : 'Ver más' }}
-              </button>
-            }
-          </td>
-          <td class="texto-largo">
-            <span>{{ preparacionAbierta().has(receta.id) ? receta.preparacion : resumen(receta.preparacion) }}</span>
-            @if (esLargo(receta.preparacion)) {
-              <button type="button" class="ver-mas" (click)="togglePreparacion(receta.id)">
-                {{ preparacionAbierta().has(receta.id) ? 'Ocultar' : 'Ver más' }}
-              </button>
-            }
-          </td>
-          <td>
-            <a [routerLink]="['/recetas', receta.id, 'editar']">Editar</a>
-            <button type="button" (click)="borrar(receta.id)">Borrar</button>
-          </td>
+          <th>ID</th><th>Nombre</th><th>Tiempo (min)</th><th>Porciones</th><th>Categoría</th><th>Ingredientes</th><th>Preparación</th><th>Acciones</th>
         </tr>
-      } @empty {
-        <tr><td colspan="8">No hay recetas para este filtro.</td></tr>
-      }
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        @for (receta of recetas(); track receta.id) {
+          <tr>
+            <td>{{ receta.id }}</td>
+            <td>{{ receta.nombre }}</td>
+            <td>{{ receta.tiempo }}</td>
+            <td>{{ receta.porciones }}</td>
+            <td>{{ receta.categoria.nombre }}</td>
+            <td class="texto-largo">
+              <span>{{ ingredientesAbiertos().has(receta.id) ? receta.ingredientes : resumen(receta.ingredientes) }}</span>
+              @if (esLargo(receta.ingredientes)) {
+                <button type="button" class="ver-mas" (click)="toggleIngredientes(receta.id)">
+                  {{ ingredientesAbiertos().has(receta.id) ? 'Ocultar' : 'Ver más' }}
+                </button>
+              }
+            </td>
+            <td class="texto-largo">
+              <span>{{ preparacionAbierta().has(receta.id) ? receta.preparacion : resumen(receta.preparacion) }}</span>
+              @if (esLargo(receta.preparacion)) {
+                <button type="button" class="ver-mas" (click)="togglePreparacion(receta.id)">
+                  {{ preparacionAbierta().has(receta.id) ? 'Ocultar' : 'Ver más' }}
+                </button>
+              }
+            </td>
+            <td>
+              <a [routerLink]="['/recetas', receta.id, 'editar']">Editar</a>
+              <button type="button" (click)="borrar(receta.id)">Borrar</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr><td colspan="8">No hay recetas para este filtro.</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
 }
