@@ -1,11 +1,12 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Categoria } from '../models/categoria.interface';
 import { Receta } from '../models/receta.interface';
 import { CategoriasService } from '../services/categorias';
 import { RecetasService } from '../services/recetas';
 
 @Component({
-  imports: [],
+  imports: [RouterLink],
   selector: 'app-recetas',
   styleUrl: './recetas.scss',
   templateUrl: './recetas.html',
@@ -19,6 +20,10 @@ export class Recetas implements OnInit {
   categoriaSeleccionada = signal<number | null>(null);
   cargando = signal(true);
   error = signal('');
+
+  readonly limite = 60;
+  ingredientesAbiertos = signal<Set<number>>(new Set<number>());
+  preparacionAbierta = signal<Set<number>>(new Set<number>());
 
   ngOnInit(): void {
     this.cargarCategorias();
@@ -56,5 +61,37 @@ export class Recetas implements OnInit {
     const valor = (event.target as HTMLSelectElement).value;
     this.categoriaSeleccionada.set(valor ? Number(valor) : null);
     this.cargarRecetas();
+  }
+
+  resumen(texto: string): string {
+    return texto.length > this.limite ? texto.slice(0, this.limite) + '…' : texto;
+  }
+
+  esLargo(texto: string): boolean {
+    return texto.length > this.limite;
+  }
+
+  toggleIngredientes(id: number): void {
+    this.ingredientesAbiertos.update((ids) => {
+      const nuevos = new Set(ids);
+      if (nuevos.has(id)) nuevos.delete(id); else nuevos.add(id);
+      return nuevos;
+    });
+  }
+
+  togglePreparacion(id: number): void {
+    this.preparacionAbierta.update((ids) => {
+      const nuevos = new Set(ids);
+      if (nuevos.has(id)) nuevos.delete(id); else nuevos.add(id);
+      return nuevos;
+    });
+  }
+
+  borrar(id: number): void {
+    if (!confirm('¿Borrar la receta ' + id + '?')) return;
+    this.recetasService.remove(id).subscribe({
+      next: () => this.cargarRecetas(),
+      error: (err) => this.error.set(err?.error?.message ?? 'No se pudo borrar la receta.'),
+    });
   }
 }

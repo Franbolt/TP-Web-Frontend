@@ -1,5 +1,8 @@
 <h2>Recetas</h2>
 
+<a routerLink="/recetas/nueva" class="boton">Nueva receta</a>
+
+
 <label for="filtro">Filtrar por categoría:</label>
 <select id="filtro" (change)="alCambiarCategoria($event)">
   <option value="">Todas</option>
@@ -20,7 +23,7 @@
   <table>
     <thead>
       <tr>
-        <th>ID</th><th>Nombre</th><th>Tiempo (min)</th><th>Porciones</th><th>Categoría</th>
+        <th>ID</th><th>Nombre</th><th>Tiempo (min)</th><th>Porciones</th><th>Categoría</th><th>Ingredientes</th><th>Preparación</th><th>Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -31,9 +34,29 @@
           <td>{{ receta.tiempo }}</td>
           <td>{{ receta.porciones }}</td>
           <td>{{ receta.categoria.nombre }}</td>
+          <td class="texto-largo">
+            <span>{{ ingredientesAbiertos().has(receta.id) ? receta.ingredientes : resumen(receta.ingredientes) }}</span>
+            @if (esLargo(receta.ingredientes)) {
+              <button type="button" class="ver-mas" (click)="toggleIngredientes(receta.id)">
+                {{ ingredientesAbiertos().has(receta.id) ? 'Ocultar' : 'Ver más' }}
+              </button>
+            }
+          </td>
+          <td class="texto-largo">
+            <span>{{ preparacionAbierta().has(receta.id) ? receta.preparacion : resumen(receta.preparacion) }}</span>
+            @if (esLargo(receta.preparacion)) {
+              <button type="button" class="ver-mas" (click)="togglePreparacion(receta.id)">
+                {{ preparacionAbierta().has(receta.id) ? 'Ocultar' : 'Ver más' }}
+              </button>
+            }
+          </td>
+          <td>
+            <a [routerLink]="['/recetas', receta.id, 'editar']">Editar</a>
+            <button type="button" (click)="borrar(receta.id)">Borrar</button>
+          </td>
         </tr>
       } @empty {
-        <tr><td colspan="5">No hay recetas para este filtro.</td></tr>
+        <tr><td colspan="8">No hay recetas para este filtro.</td></tr>
       }
     </tbody>
   </table>
